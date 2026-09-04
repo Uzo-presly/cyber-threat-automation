@@ -1,0 +1,72 @@
+# ============================================================
+# PYTHON VIRTUAL ENVIRONMENT
+# ============================================================
+# The virtual environment can be recreated with pip.
+# We NEVER upload it to GitHub.
+myvenv/
+
+# ============================================================
+# PYTHON CACHE FILES
+# ============================================================
+# Python creates these automatically when programs run.
+__pycache__/
+*.py[cod]
+
+# ============================================================
+# ENVIRONMENT / SECRET FILES
+# ============================================================
+# These files which connect to /.bashrc may contain API keys, passwords or other secrets.
+.env
+.env.*
+*.secret
+
+# ============================================================
+# GENERATED REPORTS
+# ============================================================
+# These are output produced by our automation.
+# We will keep them locally for now.
+reports/
+
+# ============================================================
+# OLD DEVELOPMENT / LEARNING VERSIONS
+# ============================================================
+# Keep these on the laptop as our development trajectory,
+# but do NOT publish them to GitHub.
+src/v1_*
+src/v2_*
+src/v3_*
+src/v4_*
+src/v5_*
+v1_cyber_threat_automation.py
+
+# ============================================================
+# LOG FILES
+# ============================================================
+*.log
+
+# ============================================================
+# PYTHON TESTING / COVERAGE FILES
+# ============================================================
+.pytest_cache/
+.coverage
+
+# ============================================================
+# PRIVATE CRYPTOGRAPHIC MATERIAL
+# ============================================================
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ============================================================
+# OPERATING SYSTEM / EDITOR FILES
+# ============================================================
+.DS_Store
+Thumbs.db
+.vscode/
+# ============================================================
+# PRIVATE / LOCAL DEVELOPMENT NOTES
+# ============================================================
+# This file contains our local AI/PoC development material.
+# Keep it on the laptop, but do NOT publish it to GitHub.
+proofOfConceptWithAi.txt
