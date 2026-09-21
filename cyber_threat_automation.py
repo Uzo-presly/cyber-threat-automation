@@ -4,54 +4,65 @@
 #
 # This script is the top-level controller of the project.
 #
-# Instead of manually running:
+# It does NOT modify vulnerabilities.py.
 #
-#     vulnerabilities.py
+# It simply:
 #
-# and then manually running:
-#
-#     email_sender.py
-#
-# this script runs the entire cybersecurity automation
-# pipeline from one command.
+#     1. Runs vulnerability automation
+#     2. Receives the generated report path
+#     3. Sends the report by email
+#     4. Displays the final result
 #
 # ------------------------------------------------------------
 
 
-# Import the main vulnerability automation function.
+# ------------------------------------------------------------
+# MAKE THE src DIRECTORY AVAILABLE TO PYTHON
+# ------------------------------------------------------------
 #
-# This function:
+# vulnerabilities.py currently imports some modules like:
 #
-#     - downloads the CISA KEV catalog
-#     - collects recent vulnerabilities from NVD
-#     - calculates priority
-#     - checks KEV status
-#     - sends vulnerability information to Gemini
-#     - creates the cybersecurity threat report
+#     from report import save_report
 #
+# Because report.py is inside src/, we add src/ to Python's
+# module search path here.
+#
+# This allows us to leave vulnerabilities.py unchanged.
+# ------------------------------------------------------------
+
+import sys
+import os
+
+
+SRC_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "src"
+)
+
+
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
+
+
+# ------------------------------------------------------------
+# IMPORT THE PROJECT FUNCTIONS
+# ------------------------------------------------------------
+
 from src.vulnerabilities import run_vulnerability_automation
-
-
-# Import the email delivery function.
-#
-# IMPORTANT:
-#
-# We may need to adjust the exact function name below
-# depending on what you named the email function inside
-# email_sender.py.
-#
 from src.email_sender import send_threat_report
 
 
 # ------------------------------------------------------------
-# MAIN ORCHESTRATOR FUNCTION
+# MAIN ORCHESTRATOR CLASS
 # ------------------------------------------------------------
-class theController():
+
+class theController:
+
     def run_cyber_threat_automation(self):
         """
         Run the complete cybersecurity threat automation system.
 
-        The workflow is:
+        Workflow:
 
             NVD vulnerabilities
                     ↓
@@ -68,17 +79,10 @@ class theController():
             Email delivery
         """
 
-
         print()
-
         print("=" * 70)
-
-        print(
-            "CYBER THREAT AUTOMATION SYSTEM"
-        )
-
+        print("CYBER THREAT AUTOMATION SYSTEM")
         print("=" * 70)
-
         print()
 
         print(
@@ -93,14 +97,9 @@ class theController():
         # --------------------------------------------------------
 
         print()
-
-        print(
-            "[+] STEP 1: Running vulnerability analysis..."
-        )
+        print("[+] STEP 1: Running vulnerability analysis...")
 
 
-        # vulnerabilities.py performs the analysis and
-        # returns the location of the generated report.
         report_path = run_vulnerability_automation()
 
 
@@ -112,22 +111,22 @@ class theController():
         if not report_path:
 
             print()
-
             print(
                 "[!] Automation stopped because no report "
                 "was generated."
             )
-        else: 
 
-            
+            return False
 
 
-            print()
+        print()
+        print(
+            "[+] Vulnerability analysis completed successfully."
+        )
 
-            print(
-                "[+] Vulnerability analysis completed successfully."
-            )
-
+        print(
+            f"[+] Report created: {report_path}"
+        )
 
 
         # --------------------------------------------------------
@@ -136,10 +135,7 @@ class theController():
         # --------------------------------------------------------
 
         print()
-
-        print(
-            "[+] STEP 2: Sending threat report by email..."
-        )
+        print("[+] STEP 2: Sending threat report by email...")
 
 
         email_success = send_threat_report(
@@ -153,8 +149,8 @@ class theController():
         # --------------------------------------------------------
 
         print()
-
         print("=" * 70)
+
 
         if email_success:
 
@@ -173,15 +169,22 @@ class theController():
 
         print("=" * 70)
 
-        return email_success()
+
+        return email_success
 
 
-    # ------------------------------------------------------------
-    # PROGRAM ENTRY POINT
-    # ------------------------------------------------------------
+# ------------------------------------------------------------
+# PROGRAM ENTRY POINT
+# ------------------------------------------------------------
+#
+# This runs only when this file is executed directly:
+#
+#     python3 cyber_threat_automation.py
+#
+# ------------------------------------------------------------
 
-    # This section runs only when this file is executed directly.
+if __name__ == "__main__":
 
-    if __name__ == "__main__":
+    controller = theController()
 
-        run_cyber_threat_automation()
+    controller.run_cyber_threat_automation()
